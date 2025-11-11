@@ -1,0 +1,58 @@
+-- Crear la base de datos
+CREATE DATABASE clinica_medica;
+
+-- Usar la base de datos
+\c clinica_medica;
+
+-- Crear tabla Especialidad
+CREATE TABLE especialidad (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL
+);
+
+-- Crear tabla Medico
+CREATE TABLE medico (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    especialidad_id INTEGER,
+    FOREIGN KEY (especialidad_id) REFERENCES especialidad(id)
+);
+
+-- Crear tabla Paciente
+CREATE TABLE paciente (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    fecha_nacimiento DATE NOT NULL,
+    telefono VARCHAR(20) NOT NULL
+);
+
+-- Crear tabla Cita
+CREATE TABLE cita (
+    id SERIAL PRIMARY KEY,
+    paciente_id INTEGER NOT NULL,
+    medico_id INTEGER NOT NULL,
+    especialidad_id INTEGER NOT NULL,
+    fecha DATE NOT NULL,
+    FOREIGN KEY (paciente_id) REFERENCES paciente(id),
+    FOREIGN KEY (medico_id) REFERENCES medico(id),
+    FOREIGN KEY (especialidad_id) REFERENCES especialidad(id)
+);
+
+-- Crear tabla HistoriaClinica
+CREATE TABLE historia_clinica (
+    id SERIAL PRIMARY KEY,
+    paciente_id INTEGER NOT NULL,
+    medico_id INTEGER NOT NULL,
+    fecha DATE NOT NULL,
+    descripcion TEXT NOT NULL,
+    FOREIGN KEY (paciente_id) REFERENCES paciente(id),
+    FOREIGN KEY (medico_id) REFERENCES medico(id)
+);
+
+-- Crear tabla Receta
+CREATE TABLE receta (
+    id SERIAL PRIMARY KEY,
+    historia_clinica_id INTEGER NOT NULL,
+    medicamentos TEXT NOT NULL,
+    FOREIGN KEY (historia_clinica_id) REFERENCES historia_clinica(id)
+);
